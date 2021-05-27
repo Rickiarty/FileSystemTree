@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 """
  * 
  *  Coded by Rei-Chi Lin 
@@ -13,6 +16,7 @@ import os
 import sys
 
 def file_system_tree(parent_path, line, manifest_stream):
+    size = 0
     file_system_objects = os.listdir(parent_path)
     
     i = 1
@@ -30,12 +34,17 @@ def file_system_tree(parent_path, line, manifest_stream):
 
         if os.path.isdir(obj_path):
             if i == len(file_system_objects):
-                file_system_tree(os.path.join(parent_path, obj), line + '    ', manifest_stream)
+                size += file_system_tree(os.path.join(parent_path, obj), line + '    ', manifest_stream)
             else:
-                file_system_tree(os.path.join(parent_path, obj), line + '│   ', manifest_stream)
+                size += file_system_tree(os.path.join(parent_path, obj), line + '│   ', manifest_stream)
+        
+        try:
+            size += int(os.path.getsize(obj_path))
+        except:
+            size += int(0)
         i += 1
     
-    return 0
+    return size
 
 def construct_tree(start_path, manifest_needed):
     _status_code = 0
@@ -51,23 +60,19 @@ def construct_tree(start_path, manifest_needed):
         print('\nERROR: \n The process can not access the path given !\n Please check whether the path exists.\n And check if the access to the path is permitted or not.\n')
         _status_code = -1
         return _status_code
-    try:
-        total_size = int(os.path.getsize(start_path) / 8)
-    except:
-        total_size = int(0)
-        print('\nERROR: The process can not get the size of the folder/file given !\n')
     
     manifest_stream = None
     try:
         print('###\n\nStart path: \n ' + abs_path + '\n')
-        print('Total size: ' + str(total_size) + ' byte(s)\n\n###\n')
         print('.')
         if manifest_needed:
             manifest_stream = open(os.path.join(os.getcwd(), 'manifest.log'), 'w')
             manifest_stream.write('###\n\nStart path: \n ' + abs_path + '\n')
-            manifest_stream.write('Total size: ' + str(total_size) + ' byte(s)\n\n###\n')
             manifest_stream.write('.\n')
-        file_system_tree(abs_path, '', manifest_stream)
+        total_size = file_system_tree(abs_path, '', manifest_stream)
+        print('\nTotal size: ' + str(total_size) + ' byte(s)\n\n###')
+        if manifest_needed:
+            manifest_stream.write('\nTotal size: ' + str(total_size) + ' byte(s)\n\n###\n')
     except:
         print('\nERROR: The process crashed due to some unknown reason !\n')
         _status_code = -1
@@ -77,8 +82,8 @@ def construct_tree(start_path, manifest_needed):
     
     return _status_code
 
-def run():
-    _version_code = '1.0.0'
+def main():
+    _version_code = '1.1.0' # version code
     manifest_needed = False
     start_path = ''
 
@@ -107,4 +112,5 @@ def run():
     construct_tree(start_path, manifest_needed)
     return 0
 
-run()
+if __name__ == '__main__':
+    main()

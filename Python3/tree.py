@@ -50,14 +50,14 @@ def construct_tree(start_path, manifest_needed):
     _status_code = 0
     abs_path = ''
     try:
-        if os.path.exists(start_path):
+        if os.path.exists(start_path) and os.path.isdir(start_path):
             abs_path = os.path.abspath(start_path)
         else:
-            print('\nERROR: \n The process can not access the path given !\n Please check whether the path exists.\n And check if the access to the path is permitted or not.\n')
+            print('\nERROR: \n\n The process can not access the given path !\n Please check whether the path exists and whether the path is to a directory/folder.\n And check if the access to the path is permitted or not.\n')
             _status_code = -1
             return _status_code
     except:
-        print('\nERROR: \n The process can not access the path given !\n Please check whether the path exists.\n And check if the access to the path is permitted or not.\n')
+        print('\nERROR: \n\n The process can not access the path given !\n Please check whether the path exists.\n And check if the access to the path is permitted or not.\n')
         _status_code = -1
         return _status_code
     

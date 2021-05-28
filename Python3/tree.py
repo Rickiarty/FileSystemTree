@@ -100,7 +100,7 @@ def format_number_kilo_by_kilo(number):
     return formatted_str
 
 def main():
-    _version_code = '1.1.3' # version code
+    _version_code = '1.1.4' # version code
     manifest_needed = False
     start_path = ''
 

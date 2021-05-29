@@ -97,6 +97,22 @@ def construct_tree(start_path, manifest_needed):
     
     return _status_code
 
+def padding_number_to_3_digits(number):
+    if number < 0:
+        return '-' + padding_number_to_3_digits(abs(number))
+    numeric_str = ''
+    if number == 0:
+        numeric_str = '000'
+    else:
+        if number < 10:
+            numeric_str = '00' + str(number)
+        else:
+            if number < 100:
+                numeric_str = '0' + str(number)
+            else:
+                numeric_str = str(number)
+    return numeric_str
+
 def format_number_kilo_by_kilo(number):
     if number == 0:
         return "0"
@@ -106,16 +122,22 @@ def format_number_kilo_by_kilo(number):
     formatted_str = ""
     count = 0
     while number > 0:
-        if count > 0:
-            formatted_str = str(number % 1000) + "," + formatted_str
+        if number // 1000 == 0:
+            if count > 0:
+                formatted_str = str(number % 1000) + "," + formatted_str
+            else:
+                formatted_str = str(number % 1000) + formatted_str
         else:
-            formatted_str = str(number % 1000) + formatted_str
+            if count > 0:
+                formatted_str = padding_number_to_3_digits(number % 1000) + "," + formatted_str
+            else:
+                formatted_str = padding_number_to_3_digits(number % 1000) + formatted_str
         number = number // 1000
         count += 1
     return formatted_str
 
 def main():
-    _version_code = '1.2.0' # version code
+    _version_code = '1.3.0' # version code
     manifest_needed = False
     start_path = ''
 

@@ -17,6 +17,8 @@ import sys
 
 def file_system_tree(parent_path, line, manifest_stream):
     size = 0
+    file_count = 0
+    folder_count = 0
     file_system_objects = os.listdir(parent_path)
     
     i = 1
@@ -33,10 +35,19 @@ def file_system_tree(parent_path, line, manifest_stream):
             manifest_stream.write(_line + '\n')
 
         if os.path.isdir(obj_path):
+            folder_count += 1
             if i == len(file_system_objects):
-                size += file_system_tree(os.path.join(parent_path, obj), line + '    ', manifest_stream)
+                t_size, folder_c, file_c = file_system_tree(os.path.join(parent_path, obj), line + '    ', manifest_stream)
+                size += t_size
+                folder_count += folder_c
+                file_count += file_c
             else:
-                size += file_system_tree(os.path.join(parent_path, obj), line + '│   ', manifest_stream)
+                t_size, folder_c, file_c = file_system_tree(os.path.join(parent_path, obj), line + '│   ', manifest_stream)
+                size += t_size
+                folder_count += folder_c
+                file_count += file_c
+        else:
+            file_count += 1
         
         try:
             size += int(os.path.getsize(obj_path))
@@ -44,7 +55,7 @@ def file_system_tree(parent_path, line, manifest_stream):
             size += int(0)
         i += 1
     
-    return size
+    return size, folder_count, file_count
 
 def construct_tree(start_path, manifest_needed):
     _status_code = 0
@@ -69,9 +80,13 @@ def construct_tree(start_path, manifest_needed):
             manifest_stream = open(os.path.join(os.getcwd(), 'manifest.log'), 'w')
             manifest_stream.write('###\n\nStart path: \n ' + abs_path + '\n')
             manifest_stream.write('.\n')
-        total_size = file_system_tree(abs_path, '', manifest_stream)
+        total_size, folder_count, file_count = file_system_tree(abs_path, '', manifest_stream)
+        print('\n' + format_number_kilo_by_kilo(file_count) + ' file(s),')
+        print(format_number_kilo_by_kilo(folder_count) + ' folder(s),')
         print('\nTotal size: ' + format_number_kilo_by_kilo(total_size) + ' byte(s)\n\n###')
         if manifest_needed:
+            manifest_stream.write('\n' + format_number_kilo_by_kilo(file_count) + ' file(s),\n')
+            manifest_stream.write(format_number_kilo_by_kilo(folder_count) + ' folder(s),\n')
             manifest_stream.write('\nTotal size: ' + format_number_kilo_by_kilo(total_size) + ' byte(s)\n\n###\n')
     except:
         print('\nERROR: The process crashed due to some unknown reason !\n')
@@ -100,7 +115,7 @@ def format_number_kilo_by_kilo(number):
     return formatted_str
 
 def main():
-    _version_code = '1.1.4' # version code
+    _version_code = '1.2.0' # version code
     manifest_needed = False
     start_path = ''
 

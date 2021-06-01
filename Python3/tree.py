@@ -137,7 +137,7 @@ def format_number_kilo_by_kilo(number):
     return formatted_str
 
 def main():
-    _version_code = '1.4.0' # version code
+    _version_code = '1.4.1' # version code
     manifest_needed = False
     start_path = ''
     dir_path_to_save_result = ''
@@ -181,6 +181,7 @@ def main():
             help_info += "\nOr just pass no argument to the program.\n"
             help_info += "\nIf you didn't give the program a specific path to search, the default path to search would be your current path.\n"
             print(help_info)
+            return 1
         else:
             start_path = str(sys.argv[1])
             dir_path_to_save_result = start_path # (not used)

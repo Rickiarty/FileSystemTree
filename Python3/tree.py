@@ -57,7 +57,7 @@ def file_system_tree(parent_path, line, manifest_stream):
     
     return size, folder_count, file_count
 
-def construct_tree(start_path, manifest_needed):
+def construct_tree(start_path, manifest_needed, dir_path_to_save_result):
     _status_code = 0
     abs_path = ''
     try:
@@ -77,7 +77,7 @@ def construct_tree(start_path, manifest_needed):
         print('###\n\nStart path: \n ' + abs_path + '\n')
         print('.')
         if manifest_needed:
-            manifest_stream = open(os.path.join(os.getcwd(), 'manifest.log'), 'w')
+            manifest_stream = open(os.path.join(os.path.abspath(dir_path_to_save_result), 'manifest.log'), 'w')
             manifest_stream.write('###\n\nStart path: \n ' + abs_path + '\n')
             manifest_stream.write('.\n')
         total_size, folder_count, file_count = file_system_tree(abs_path, '', manifest_stream)
@@ -137,22 +137,30 @@ def format_number_kilo_by_kilo(number):
     return formatted_str
 
 def main():
-    _version_code = '1.3.0' # version code
+    _version_code = '1.4.0' # version code
     manifest_needed = False
     start_path = ''
+    dir_path_to_save_result = ''
 
-    if len(sys.argv) == 3:
+    if len(sys.argv) == 4:
+        if sys.argv[2] == '--manifest':
+            manifest_needed = True
+            start_path = str(sys.argv[1])
+            dir_path_to_save_result = str(sys.argv[3])
+        else:
+            print("\nERROR: Invalid argument(s) !\n\nType '--help' or '-h' for more info.\n")
+            return -1
+    elif len(sys.argv) == 3:
         if sys.argv[1] == '--manifest':
             manifest_needed = True
-            start_path = str(sys.argv[2])
+            start_path = os.getcwd() # get current working directory
+            dir_path_to_save_result = str(sys.argv[2])
         elif sys.argv[2] == '--manifest':
             manifest_needed = True
             start_path = str(sys.argv[1])
-        elif sys.argv[1] == '--version' or sys.argv[2] == '--version':
-            print('\n\tversion: ' + _version_code + '\n\t\tby Rei-Chi Lin\n')
-            return 1
+            dir_path_to_save_result = os.getcwd() # get current working directory
         else:
-            print('\nERROR: Invalid argument(s) !\n')
+            print("\nERROR: Invalid argument(s) !\n\nType '--help' or '-h' for more info.\n")
             return -1
     elif len(sys.argv) == 2:
         if sys.argv[1] == '--version':
@@ -161,15 +169,29 @@ def main():
         elif sys.argv[1] == '--manifest':
             manifest_needed = True
             start_path = os.getcwd() # get current working directory
+            dir_path_to_save_result = os.getcwd() # get current working directory
+        elif sys.argv[1] == '--help' or sys.argv[1] == '-h':
+            help_info = "\nusage:\n\n"
+            help_info += "[directory_path_to_search] [--manifest] [directory_path_to_save_result]\n"
+            help_info += "e.g., ~/Downloads --manifest ~/Desktop\n"
+            help_info += "or ~/Downloads --manifest\n"
+            help_info += "or --manifest ~/Desktop\n"
+            help_info += "or --manifest\n"
+            help_info += "or ~/Downloads\n"
+            help_info += "\nOr just pass no argument to the program.\n"
+            help_info += "\nIf you didn't give the program a specific path to search, the default path to search would be your current path.\n"
+            print(help_info)
         else:
             start_path = str(sys.argv[1])
+            dir_path_to_save_result = start_path # (not used)
     elif len(sys.argv) == 1:
         start_path = os.getcwd() # get current working directory
+        dir_path_to_save_result = start_path # (not used)
     else:
-        print('\nERROR: Too many arguments !\n')
+        print("\nERROR: Too many arguments !\n\nType '--help' or '-h' for usage info.\n")
         return -1
     
-    _status_code = construct_tree(start_path, manifest_needed)
+    _status_code = construct_tree(start_path, manifest_needed, dir_path_to_save_result)
     return _status_code
 
 if __name__ == '__main__':

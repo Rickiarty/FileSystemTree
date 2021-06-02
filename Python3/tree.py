@@ -15,11 +15,16 @@
 import os
 import sys
 
+__version_code = '1.4.2' # version code
+
+def version():
+    return __version_code
+
 def file_system_tree(parent_path, line, manifest_stream):
     size = 0
     file_count = 0
     folder_count = 0
-    file_system_objects = os.listdir(parent_path)
+    file_system_objects = sorted(os.listdir(parent_path))
     
     i = 1
     for obj in file_system_objects:
@@ -137,7 +142,6 @@ def format_number_kilo_by_kilo(number):
     return formatted_str
 
 def main():
-    _version_code = '1.4.1' # version code
     manifest_needed = False
     start_path = ''
     dir_path_to_save_result = ''
@@ -164,7 +168,7 @@ def main():
             return -1
     elif len(sys.argv) == 2:
         if sys.argv[1] == '--version':
-            print('\n\tversion: ' + _version_code + '\n\t\tby Rei-Chi Lin\n')
+            print('\n\tversion: ' + version() + '\n\t\tby Rei-Chi Lin\n')
             return 1
         elif sys.argv[1] == '--manifest':
             manifest_needed = True
@@ -172,14 +176,14 @@ def main():
             dir_path_to_save_result = os.getcwd() # get current working directory
         elif sys.argv[1] == '--help' or sys.argv[1] == '-h':
             help_info = "\nusage:\n\n"
-            help_info += "[directory_path_to_search] [--manifest] [directory_path_to_save_result]\n"
+            help_info += "[directory_path_to_explore] [--manifest] [directory_path_to_save_result]\n"
             help_info += "e.g., ~/Downloads --manifest ~/Desktop\n"
             help_info += "or ~/Downloads --manifest\n"
             help_info += "or --manifest ~/Desktop\n"
             help_info += "or --manifest\n"
             help_info += "or ~/Downloads\n"
             help_info += "\nOr just pass no argument to the program.\n"
-            help_info += "\nIf you didn't give the program a specific path to search, the default path to search would be your current path.\n"
+            help_info += "\nIf you didn't give the program a specific path to explore, the default path to explore would be your current path.\n"
             print(help_info)
             return 1
         else:

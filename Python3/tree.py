@@ -8,14 +8,17 @@
 """
 
 # The special characters used in this program: 
+# "├──Ɖ ",
+# "└──Ɖ ",
 # "├── ", 
 # "└── ", 
 # "│   ". 
+# (Ɖ: LATIN CAPITAL LETTER AFRICAN D (U+0189) c689)
 
 import os
 import sys
 
-__version_code = '1.4.2' # version code
+__version_code = '1.5.0' # version code
 
 def version():
     return __version_code
@@ -31,9 +34,15 @@ def file_system_tree(parent_path, line, manifest_stream):
         _line = line
         obj_path = os.path.join(parent_path, obj)
         if i == len(file_system_objects):
-            _line += '└── ' + obj
+            if os.path.isdir(obj_path):
+                _line += '└──Ɖ ' + obj
+            else:
+                _line += '└── ' + obj
         else:
-            _line += '├── ' + obj
+            if os.path.isdir(obj_path):
+                _line += '├──Ɖ ' + obj
+            else:
+                _line += '├── ' + obj
         
         print(_line)
         if manifest_stream != None:
@@ -57,7 +66,10 @@ def file_system_tree(parent_path, line, manifest_stream):
         try:
             size += int(os.path.getsize(obj_path))
         except:
-            size += int(0)
+            # We have nothing to do in this block. Just skip it.
+            # Because there are no braces or any symbols other than indents to let interpreters or compilers know how to specify a block of source code in Python, 
+            # we use just a keyword 'pass', which is a null statement in Python, to do nothing but end this block of code.
+            pass
         i += 1
     
     return size, folder_count, file_count
@@ -70,11 +82,11 @@ def construct_tree(start_path, manifest_needed, dir_path_to_save_result):
             abs_path = os.path.abspath(start_path)
         else:
             print('\nERROR: \n\n The process can not access the given path !\n Please check whether the path exists and whether the path is to a directory/folder.\n And check if the access to the path is permitted or not.\n')
-            _status_code = -1
+            _status_code = -2
             return _status_code
     except:
         print('\nERROR: \n\n The process can not access the path given !\n Please check whether the path exists.\n And check if the access to the path is permitted or not.\n')
-        _status_code = -1
+        _status_code = -3
         return _status_code
     
     manifest_stream = None
@@ -169,7 +181,7 @@ def main():
     elif len(sys.argv) == 2:
         if sys.argv[1] == '--version':
             print('\n\tversion: ' + version() + '\n\t\tby Rei-Chi Lin\n')
-            return 1
+            return 2
         elif sys.argv[1] == '--manifest':
             manifest_needed = True
             start_path = os.getcwd() # get current working directory
@@ -194,7 +206,7 @@ def main():
         dir_path_to_save_result = start_path # (not used)
     else:
         print("\nERROR: Too many arguments !\n\nType '--help' or '-h' for usage info.\n")
-        return -1
+        return -4
     
     _status_code = construct_tree(start_path, manifest_needed, dir_path_to_save_result)
     return _status_code

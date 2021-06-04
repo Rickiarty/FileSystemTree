@@ -18,7 +18,7 @@
 import os
 import sys
 
-__version_code = '1.5.0' # version code
+__version_code = '1.5.1' # version code
 
 def version():
     return __version_code
@@ -67,8 +67,8 @@ def file_system_tree(parent_path, line, manifest_stream):
             size += int(os.path.getsize(obj_path))
         except:
             # We have nothing to do in this block. Just skip it.
-            # Because there are no braces or any symbols other than indents to let interpreters or compilers know how to specify a block of source code in Python, 
-            # we use just a keyword 'pass', which is a null statement in Python, to do nothing but end this block of code.
+            # There are no braces '{}' or any symbols other than indents to tell interpreters or compilers how to specify a block of source code in Python. And in Python, once we write a clause such as 'except:', 'finally:', 'else:', ...etc., we cannot leave the block under it blank. And by rules of Python, if we write a clause "try:", we must write at least one corresponding clause 'except:' or 'finally:' for it. 
+            # Consequently, we use just a keyword 'pass', which is a null statement in Python, to do nothing but end this block of code.
             pass
         i += 1
     

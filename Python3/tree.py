@@ -12,13 +12,14 @@
 # "└──Ɖ ",
 # "├── ", 
 # "└── ", 
-# "│   ". 
+# "│   ",
+# "    ". 
 # (Ɖ: LATIN CAPITAL LETTER AFRICAN D (U+0189) c689)
 
 import os
 import sys
 
-__version_code = '1.5.1' # version code
+__version_code = '1.5.3' # version code
 
 def version():
     return __version_code
@@ -94,7 +95,12 @@ def construct_tree(start_path, manifest_needed, dir_path_to_save_result):
         print('###\n\nStart path: \n ' + abs_path + '\n')
         print('.')
         if manifest_needed:
-            manifest_stream = open(os.path.join(os.path.abspath(dir_path_to_save_result), 'manifest.log'), 'w')
+            if os.path.exists(dir_path_to_save_result) and os.path.isdir(dir_path_to_save_result):
+                dir_path_to_save_result = os.path.abspath(dir_path_to_save_result)
+            else:
+                print('\nERROR: \n\n The path to save result cannot be accessed.\n Please check whether the path to save result exists and whether the path is to a directory/folder.\n And check if the access to the path is permitted or not.\n')
+                return -5
+            manifest_stream = open(os.path.join(dir_path_to_save_result, 'manifest.log'), 'w')
             manifest_stream.write('###\n\nStart path: \n ' + abs_path + '\n')
             manifest_stream.write('.\n')
         total_size, folder_count, file_count = file_system_tree(abs_path, '', manifest_stream)
@@ -106,7 +112,7 @@ def construct_tree(start_path, manifest_needed, dir_path_to_save_result):
             manifest_stream.write(format_number_kilo_by_kilo(folder_count) + ' folder(s),\n')
             manifest_stream.write('\nTotal size: ' + format_number_kilo_by_kilo(total_size) + ' byte(s)\n\n###\n')
     except:
-        print('\nERROR: The process crashed due to some unknown reason !\n')
+        print('\nERROR: The process crashed due to some unknown reason(s) !\n')
         _status_code = -1
     finally:
         if manifest_stream != None:
@@ -190,12 +196,18 @@ def main():
             help_info = "\nusage:\n\n"
             help_info += "[directory_path_to_explore] [--manifest] [directory_path_to_save_result]\n"
             help_info += "e.g., ~/Downloads --manifest ~/Desktop\n"
+            help_info += "\t(to explore under '~/Downloads' and save result under '~/Desktop')\n"
             help_info += "or ~/Downloads --manifest\n"
+            help_info += "\t(to explore under '~/Downloads' and save result under current directory)\n"
             help_info += "or --manifest ~/Desktop\n"
+            help_info += "\t(to explore under current directory and save result under '~/Desktop')\n"
             help_info += "or --manifest\n"
+            help_info += "\t(to explore and save result under current directory)\n"
             help_info += "or ~/Downloads\n"
+            help_info += "\t(to explore under '~/Downloads' without saving result)\n"
             help_info += "\nOr just pass no argument to the program.\n"
-            help_info += "\nIf you didn't give the program a specific path to explore, the default path to explore would be your current path.\n"
+            help_info += "\t(to explore under current directory without saving result)\n"
+            help_info += "\nIf you don't give the program a specific path to explore/save, the default path to explore/save would be your current path.\n"
             print(help_info)
             return 1
         else:
@@ -205,7 +217,7 @@ def main():
         start_path = os.getcwd() # get current working directory
         dir_path_to_save_result = start_path # (not used)
     else:
-        print("\nERROR: Too many arguments !\n\nType '--help' or '-h' for usage info.\n")
+        print("\nERROR: Too many arguments !\n\nType either '--help' or '-h' for usage info.\n")
         return -4
     
     _status_code = construct_tree(start_path, manifest_needed, dir_path_to_save_result)

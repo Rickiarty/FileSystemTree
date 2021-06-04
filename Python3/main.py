@@ -9,7 +9,7 @@
 
 import os
 import sys
-from treelib.tree import construct_tree, version
+from fstree.tree import construct_tree, version
 
 def main():
     manifest_needed = False

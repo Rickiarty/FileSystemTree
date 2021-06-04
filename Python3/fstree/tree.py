@@ -17,7 +17,7 @@
 # (Ɖ: LATIN CAPITAL LETTER AFRICAN D (U+0189) c689)
 
 import os
-from treelib.format_number import format_number_kilo_by_kilo
+from fstree.format_number import format_number_kilo_by_kilo
 
 __version_code = '1.6.0' # version code
 

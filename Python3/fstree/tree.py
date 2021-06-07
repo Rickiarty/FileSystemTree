@@ -20,7 +20,7 @@ import os
 if __name__ != '__main__':
     from fstree.format_number import format_number_kilo_by_kilo
 
-__version_code = '1.6.3' # version code
+__version_code = '1.6.4' # version code
 
 def version():
     return __version_code
@@ -97,8 +97,6 @@ def construct_tree(start_path, manifest_needed, dir_path_to_save_result):
     
     manifest_stream = None
     try:
-        print('###\n\nStart path: \n ' + abs_path + '\n')
-        print('.')
         if manifest_needed:
             if os.path.exists(dir_path_to_save_result) and os.path.isdir(dir_path_to_save_result):
                 dir_path_to_save_result = os.path.abspath(dir_path_to_save_result)
@@ -108,14 +106,16 @@ def construct_tree(start_path, manifest_needed, dir_path_to_save_result):
             manifest_stream = open(os.path.join(dir_path_to_save_result, 'manifest.log'), 'w')
             manifest_stream.write('###\n\nStart path: \n ' + abs_path + '\n')
             manifest_stream.write('.\n')
+        print('###\n\nStart path: \n ' + abs_path + '\n')
+        print('.')
         total_size, folder_count, file_count = file_system_tree(abs_path, '', manifest_stream)
-        print('\n' + format_number_kilo_by_kilo(file_count) + ' file(s),')
-        print(format_number_kilo_by_kilo(folder_count) + ' folder(s),')
-        print('\nTotal size: ' + format_number_kilo_by_kilo(total_size) + ' byte(s)\n\n###')
         if manifest_needed:
             manifest_stream.write('\n' + format_number_kilo_by_kilo(file_count) + ' file(s),\n')
             manifest_stream.write(format_number_kilo_by_kilo(folder_count) + ' folder(s),\n')
             manifest_stream.write('\nTotal size: ' + format_number_kilo_by_kilo(total_size) + ' byte(s)\n\n###\n')
+        print('\n' + format_number_kilo_by_kilo(file_count) + ' file(s),')
+        print(format_number_kilo_by_kilo(folder_count) + ' folder(s),')
+        print('\nTotal size: ' + format_number_kilo_by_kilo(total_size) + ' byte(s)\n\n###')
     except:
         print('\nERROR: The process crashed due to some unknown reason(s) !\n')
         _status_code = -1

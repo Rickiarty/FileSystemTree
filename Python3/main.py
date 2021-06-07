@@ -22,7 +22,7 @@ def main():
             start_path = str(sys.argv[1])
             dir_path_to_save_result = str(sys.argv[3])
         else:
-            print("\nERROR: Invalid argument(s) !\n\nType '--help' or '-h' for more info.\n")
+            print("\nERROR: Invalid argument(s) !\n\nType either '--help' or '-h' for more info.\n")
             return -6
     elif len(sys.argv) == 3:
         if sys.argv[1] == '--manifest':
@@ -34,7 +34,7 @@ def main():
             start_path = str(sys.argv[1])
             dir_path_to_save_result = os.getcwd() # get current working directory
         else:
-            print("\nERROR: Invalid argument(s) !\n\nType '--help' or '-h' for more info.\n")
+            print("\nERROR: Invalid argument(s) !\n\nType either '--help' or '-h' for more info.\n")
             return -6
     elif len(sys.argv) == 2:
         if sys.argv[1] == '--version':

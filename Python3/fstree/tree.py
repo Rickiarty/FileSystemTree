@@ -17,9 +17,10 @@
 # (Ɖ: LATIN CAPITAL LETTER AFRICAN D (U+0189) c689)
 
 import os
-from fstree.format_number import format_number_kilo_by_kilo
+if __name__ != '__main__':
+    from fstree.format_number import format_number_kilo_by_kilo
 
-__version_code = '1.6.0' # version code
+__version_code = '1.6.3' # version code
 
 def version():
     return __version_code
@@ -75,6 +76,10 @@ def file_system_tree(parent_path, line, manifest_stream):
     
     return size, folder_count, file_count
 
+__author = 'Rei-Chi Lin'
+def author():
+    return __author
+
 def construct_tree(start_path, manifest_needed, dir_path_to_save_result):
     _status_code = 0
     abs_path = ''
@@ -119,3 +124,18 @@ def construct_tree(start_path, manifest_needed, dir_path_to_save_result):
             manifest_stream.close()
     
     return _status_code
+
+if __name__ == "__main__":
+    from format_number import format_number_kilo_by_kilo
+
+    print("ver. " + version() + " by " + author())
+    _status_code = construct_tree(os.getcwd(), False, "")
+    print('\n(exit code: ' + str(_status_code) + ' )')
+    print("\nThe file 'tree.py' is a program unit in module 'fstree', and it should not be used in this way.")
+    print("\n---\nAPI usage:\n")
+    print("from fstree.tree import construct_tree\n")
+    print("status_code = construct_tree(path_to_explore, manifest_needed, dir_path_to_save_result)\n")
+    print("path_to_explore :: str")
+    print("manifest_needed :: bool")
+    print("dir_path_to_save_result :: str")
+    print("status_code :: int\n---")

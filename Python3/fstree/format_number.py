@@ -7,7 +7,11 @@
  * 
 """
 
-from decimal import *
+from decimal import Decimal
+
+__author = "Rei-Chi Lin"
+def author():
+    return __author
 
 def padding_number_to_3_digits(number):
     if number < 0:
@@ -51,6 +55,7 @@ def format_number_kilo_by_kilo(number):
     return formatted_str
 
 if __name__ == "__main__":
+    # for unit test
     num = Decimal(-1002073000.75)
-    print(str(num))
-    print(format_number_kilo_by_kilo(num))
+    print("input:\n\t" + str(num))
+    print("output:\n\t" + format_number_kilo_by_kilo(num))

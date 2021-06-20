@@ -20,7 +20,7 @@ import os
 if __name__ != '__main__':
     from fstree.format_number import format_number_kilo_by_kilo
 
-__version_code = '1.6.4' # version code
+__version_code = '1.6.5' # version code
 
 def version():
     return __version_code
@@ -46,9 +46,9 @@ def file_system_tree(parent_path, line, manifest_stream):
             else:
                 _line += '├── ' + obj
         
-        print(_line)
         if manifest_stream != None:
             manifest_stream.write(_line + '\n')
+        print(_line)
 
         if os.path.isdir(obj_path):
             folder_count += 1

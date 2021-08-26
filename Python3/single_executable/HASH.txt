@@ -1,4 +1,4 @@
-hash values of ver. 1.6.5 using SHA-256: 
+hash values of ver. 1.6.5 with SHA-256: 
     Debian: 
         ac2936d3b0130c3ddad713de1a91652bb8f8bc71edbd831070320e08dcb82049
     Windows: 

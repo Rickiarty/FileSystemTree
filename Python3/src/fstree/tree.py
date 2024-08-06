@@ -20,12 +20,12 @@ import os
 if __name__ != '__main__':
     from fstree.format_number import format_number_kilo_by_kilo
 
-__version_code = '1.6.5' # version code
+__version_code = '1.7.0' # version code
 
 def version():
     return __version_code
 
-def file_system_tree(parent_path, line, manifest_stream):
+def file_system_tree(parent_path, line, manifest_stream, num_of_tiers=0, curr_tier=1):
     size = 0
     file_count = 0
     folder_count = 0
@@ -52,16 +52,17 @@ def file_system_tree(parent_path, line, manifest_stream):
 
         if os.path.isdir(obj_path):
             folder_count += 1
-            if i == len(file_system_objects):
-                t_size, folder_c, file_c = file_system_tree(os.path.join(parent_path, obj), line + '    ', manifest_stream)
-                size += t_size
-                folder_count += folder_c
-                file_count += file_c
-            else:
-                t_size, folder_c, file_c = file_system_tree(os.path.join(parent_path, obj), line + '│   ', manifest_stream)
-                size += t_size
-                folder_count += folder_c
-                file_count += file_c
+            if num_of_tiers <= 0 or curr_tier < num_of_tiers:
+                if i == len(file_system_objects):
+                    t_size, folder_c, file_c = file_system_tree(os.path.join(parent_path, obj), line + '    ', manifest_stream, num_of_tiers, curr_tier+1)
+                    size += t_size
+                    folder_count += folder_c
+                    file_count += file_c
+                else:
+                    t_size, folder_c, file_c = file_system_tree(os.path.join(parent_path, obj), line + '│   ', manifest_stream, num_of_tiers, curr_tier+1)
+                    size += t_size
+                    folder_count += folder_c
+                    file_count += file_c
         else:
             file_count += 1
         
@@ -80,7 +81,7 @@ __author = 'Rei-Chi Lin'
 def author():
     return __author
 
-def construct_tree(start_path, manifest_needed, dir_path_to_save_result):
+def construct_tree(start_path, manifest_needed, dir_path_to_save_result, num_of_tiers=0):
     _status_code = 0
     abs_path = ''
     try:
@@ -108,7 +109,7 @@ def construct_tree(start_path, manifest_needed, dir_path_to_save_result):
             manifest_stream.write('.\n')
         print('###\n\nStart path: \n ' + abs_path + '\n')
         print('.')
-        total_size, folder_count, file_count = file_system_tree(abs_path, '', manifest_stream)
+        total_size, folder_count, file_count = file_system_tree(abs_path, '', manifest_stream, num_of_tiers)
         if manifest_needed:
             manifest_stream.write('\n' + format_number_kilo_by_kilo(file_count) + ' file(s),\n')
             manifest_stream.write(format_number_kilo_by_kilo(folder_count) + ' folder(s),\n')

@@ -20,7 +20,7 @@ import os
 if __name__ != '__main__':
     from fstree.format_number import format_number_kilo_by_kilo
 
-__version_code = '1.7.0' # version code
+__version_code = '1.7.1' # version code
 
 def version():
     return __version_code

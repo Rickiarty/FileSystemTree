@@ -17,7 +17,30 @@ def main():
     dir_path_to_save_result = ''
     num_of_tiers = 0
 
-    if len(sys.argv) == 4:
+    if len(sys.argv) == 6:
+        if sys.argv[2] == '--manifest' and sys.argv[4] == '--n-tiers':
+            manifest_needed = True
+            start_path = str(sys.argv[1])
+            dir_path_to_save_result = str(sys.argv[3])
+            num_of_tiers = int(sys.argv[5])
+        else:
+            print("\nERROR: Invalid argument(s) !\n\nType either '--help' or '-h' for more info.\n")
+            return -6
+    elif len(sys.argv) == 5:
+        if sys.argv[3] == '--n-tiers':
+            num_of_tiers = int(sys.argv[4])
+        if sys.argv[1] == '--manifest':
+            manifest_needed = True
+            start_path = os.getcwd() # get current working directory
+            dir_path_to_save_result = str(sys.argv[2])
+        elif sys.argv[2] == '--manifest':
+            manifest_needed = True
+            start_path = str(sys.argv[1])
+            dir_path_to_save_result = os.getcwd() # get current working directory
+        else:
+            print("\nERROR: Invalid argument(s) !\n\nType either '--help' or '-h' for more info.\n")
+            return -6
+    elif len(sys.argv) == 4:
         if sys.argv[2] == '--manifest':
             manifest_needed = True
             start_path = str(sys.argv[1])
@@ -86,7 +109,11 @@ def main():
         print("\nERROR: Too many arguments !\n\nType either '--help' or '-h' for usage info.\n")
         return -4
     
-    _status_code = construct_tree(start_path, manifest_needed, dir_path_to_save_result, num_of_tiers)
+    try:
+        _status_code = construct_tree(start_path, manifest_needed, dir_path_to_save_result, num_of_tiers)
+    except:
+        print('Something went wrong while executing the program.\n')
+        _status_code = -101
     return _status_code
 
 if __name__ == '__main__':

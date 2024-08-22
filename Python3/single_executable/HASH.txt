@@ -1,9 +1,11 @@
-hash values of ver. 1.6.5 with SHA-256: 
-    Debian: 
-        ac2936d3b0130c3ddad713de1a91652bb8f8bc71edbd831070320e08dcb82049
-
 hash values of ver. 1.7.1 with SHA-256: 
     Windows: 
         fdd6fe372017a2094e29a9c57ac87a322af6174dbf91e7e842772bd0c7e60360
     macOS: 
         deda5e1d85e17d106452592943125d60d7cd46e215290a07f18806a6587e54a4
+	RaspberryOS on arm64:
+		5c5a7a65b5d9fba05ccd92d58f7a1da880941737f8156dba94c42ec34bf27a93
+
+hash values of ver. 1.6.5 with SHA-256: 
+    Debian: 
+        ac2936d3b0130c3ddad713de1a91652bb8f8bc71edbd831070320e08dcb82049
